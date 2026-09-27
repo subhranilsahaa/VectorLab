@@ -1,0 +1,30 @@
+let tab=1;
+const redraw=()=>tab===1?draw():tab===2?drawE():tab===3?r3Draw():tab===4?draw4():undefined;
+function showTab(t){
+  tab=t;$('#p1').hidden=t!==1;$('#p2').hidden=t!==2;$('#p3').hidden=t!==3;$('#p4').hidden=t!==4;$('#p5').hidden=t!==5;
+  document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.tab===t));
+  redraw();
+}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(+b.dataset.tab));
+let currentCat='linalg';
+function showCategory(cat){
+  currentCat=cat;
+  const isLA=cat==='linalg';
+  $('#secLinAlg').hidden=!isLA;
+  $('#secCalc').hidden=isLA;
+  $('#linalgNav').hidden=!isLA;
+  document.querySelectorAll('#cats button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cat===cat));
+  if(isLA)redraw();
+}
+document.querySelectorAll('#cats button').forEach(b=>b.onclick=()=>showCategory(b.dataset.cat));
+
+renderVecs();renderOpsSel();setAB(1,1);renderAnalysis();renderExpr();
+new ResizeObserver(()=>redraw()).observe($('#viz'));
+new ResizeObserver(()=>redraw()).observe($('#vizE'));
+new ResizeObserver(()=>redraw()).observe($('#rgeo'));
+new ResizeObserver(()=>{if(tab===4)draw4();}).observe($('#p4'));
+r3Init();
+
+renderInputs();renderResults();draw();
+animate(I3,S.A,1300,true);
+
