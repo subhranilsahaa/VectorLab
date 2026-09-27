@@ -1,0 +1,6 @@
+# Replace pub-XXXXXXXXXXXXXXXX with your real AdSense publisher ID
+# (the numeric part of ca-pub-XXXXXXXXXXXXXXXX, without "ca-").
+# This file must be served at https://your-domain.com/ads.txt exactly —
+# it does NOT work from inside a subfolder like /vectorlab/ads.txt unless
+# that's genuinely your site's root.
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

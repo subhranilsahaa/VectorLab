@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VectorLab — Linear Algebra &amp; Step-by-Step Math</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<!-- Google AdSense: replace ca-pub-XXXXXXXXXXXXXXXX with your real publisher ID -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M5 29V5M5 29h24" stroke="#4a5583" stroke-width="1.5" fill="none"/><path d="M5 29L26 29" stroke="#5cf2b0" stroke-width="2.4"/><path d="M5 29L11 8" stroke="#ff6b6b" stroke-width="2.4"/><path d="M5 29L26 29L32 8L11 8Z" fill="rgba(139,108,255,.25)" stroke="#8b6cff" stroke-width="1"/></svg>
+      <div><h1>VectorLab</h1><p>Linear algebra visualizer &amp; step-by-step algebra solver</p></div>
+    </div>
+    <div class="seg" id="cats" role="group" aria-label="Category">
+      <button aria-pressed="true" data-cat="linalg">Vector</button>
+      <button aria-pressed="false" data-cat="calc">Higher Algebra</button>
+    </div>
+  </header>
+
+  <!-- Ad slot: header banner -->
+  <div class="ad-slot ad-header">
+    <span class="ad-slot-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1111111111"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <nav class="catbar" id="linalgNav" aria-label="Section">
+    <div class="tabstrip" id="tabs" role="group" aria-label="Section"><button aria-pressed="true" data-tab="1">Matrix rank</button><button aria-pressed="false" data-tab="2">Vector explorer</button><button aria-pressed="false" data-tab="3">Row reduction</button><button aria-pressed="false" data-tab="4">3D &amp; null space</button><button aria-pressed="false" data-tab="5">Gaussian elimination</button></div>
+  </nav>
+
+  <div id="secLinAlg">
+  <div class="layout" id="p1">
+    <section class="glass" id="matrix">
+      <h2>Matrix A</h2>
+      <div class="seg" id="sizes" role="group" aria-label="Matrix size"></div>
+      <div class="mxwrap"><div class="mx" id="mx"></div></div>
+      <div class="chips" id="presets" aria-label="Presets"></div>
+      <p class="hint">Type numbers or fractions like 1/3. Arrow keys nudge a value by 0.5 (Shift: 0.1).</p>
+    </section>
+
+    <section class="glass" id="results" aria-live="polite"></section>
+
+    <section class="glass" id="viz">
+      <div class="pair">
+        <div class="cvcell"><h3><span id="tin">Input space</span><em>x</em></h3><canvas id="cin" aria-label="Input space"></canvas></div>
+        <div class="cvcell"><h3><span id="tout">Output space</span><em>Ax</em></h3><canvas id="cout" aria-label="Output space"></canvas></div>
+      </div>
+      <div class="ctrl">
+        <label>Morph<input type="range" id="morph" min="0" max="100" value="100" aria-label="Morph from identity to A"></label>
+        <button class="btn" id="replay">Replay from identity</button>
+        <label>View ±<span id="rv">5</span><input type="range" id="range" min="2" max="12" step="0.5" value="5" aria-label="View range"></label>
+      </div>
+      <div class="legend">
+        <span style="--c:var(--mint)">e₁ / Ae₁</span>
+        <span style="--c:var(--coral)">e₂ / Ae₂</span>
+        <span style="--c:var(--violet)">unit square</span>
+        <span style="--c:var(--pink)">square, orientation flipped</span>
+        <span style="--c:var(--amber)">image</span>
+        <span class="dash" style="--c:var(--pink)">kernel</span>
+      </div>
+      <div id="explain"></div>
+    </section>
+  </div>
+
+  <!-- Ad slot: between sections (sits below whichever tab panel is active) -->
+  <div class="ad-slot">
+    <span class="ad-slot-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="2222222222"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <div class="layout" id="p2" hidden>
+    <section class="glass" id="vecs">
+      <h2>Vectors in ℝ²</h2>
+      <div id="vlist"></div>
+      <div class="chips" style="margin-top:12px">
+        <button class="chip" id="vadd">Add vector</button>
+        <button class="chip" id="vrand">Randomize</button>
+        <button class="chip" id="vreset">Reset</button>
+      </div>
+      <p class="hint">Drag a vector tip on the plane, or type components. The checkbox includes or excludes a vector from the span.</p>
+    </section>
+
+    <section class="glass" id="ops">
+      <h2>Linear combination</h2>
+      <div class="sel">
+        <label>u <select id="su" aria-label="Vector u"></select></label>
+        <label>v <select id="sv" aria-label="Vector v"></select></label>
+      </div>
+      <label class="sl">a<input type="range" id="sa" min="-3" max="3" step="0.05" value="1" aria-label="Scalar a"><output id="oa">1</output></label>
+      <label class="sl">b<input type="range" id="sb" min="-3" max="3" step="0.05" value="1" aria-label="Scalar b"><output id="ob">1</output></label>
+      <div class="chips" id="opchips">
+        <button class="chip" data-op="add">u + v</button>
+        <button class="chip" data-op="sub">u − v</button>
+        <button class="chip" data-op="scale">c · u</button>
+      </div>
+      <div class="ctrl" style="margin:12px 0 0">
+        <div class="seg" id="modes" role="group" aria-label="Method"><button data-mode="tip" aria-pressed="true">Tip-to-tail</button><button data-mode="para" aria-pressed="false">Parallelogram</button></div>
+        <button class="btn" id="eplay">Animate</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="showop" checked> Show operation on the plane</label>
+      <div class="expr" id="expr"></div>
+      <p class="hint" id="opnote"></p>
+    </section>
+
+    <section class="glass" id="span">
+      <h2>Span and independence</h2>
+      <div id="spanbody"></div>
+    </section>
+
+    <section class="glass" id="vizE">
+      <h3 class="eh">Plane ℝ²</h3>
+      <canvas id="cex" aria-label="Vector plane"></canvas>
+      <div class="ctrl">
+        <label>View ±<span id="rvE">5</span><input type="range" id="rangeE" min="2" max="12" step="0.5" value="5" aria-label="View range"></label>
+      </div>
+      <div class="legend">
+        <span style="--c:var(--mint)">input vectors</span>
+        <span style="--c:rgba(92,242,176,.5)">scaled a·u, b·v</span>
+        <span style="--c:#fff">resultant w</span>
+        <span style="--c:var(--amber)">span</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="layout" id="p3" hidden>
+    <div class="stack">
+      <section class="glass" id="rin">
+        <h2>Matrix A</h2>
+        <div class="seg" id="rsizes" role="group" aria-label="Matrix size"></div>
+        <div class="chips rsz">
+          <button class="chip" id="raddr">+ Row</button><button class="chip" id="rdelr">− Row</button>
+          <button class="chip" id="raddc">+ Column</button><button class="chip" id="rdelc">− Column</button>
+        </div>
+        <div class="mxwrap"><div class="mx" id="rmx"></div></div>
+        <div class="chips" style="justify-content:center">
+          <button class="chip" id="rrand">Random</button><button class="chip" id="rreset">Reset</button><button class="chip" id="rclear">Clear</button>
+        </div>
+        <h3 class="eh" style="margin:16px 0 8px">Examples</h3>
+        <div class="chips" id="rpresets" aria-label="Examples"></div>
+        <div class="opts">
+          <div class="opt"><span>Arithmetic</span><div class="seg" id="rmode" role="group" aria-label="Arithmetic"><button data-v="exact" aria-pressed="true">Exact</button><button data-v="numeric" aria-pressed="false">Floating point</button></div></div>
+          <div class="opt"><span>Show</span><div class="seg" id="rdisp" role="group" aria-label="Number display"><button data-v="frac" aria-pressed="true">Fractions</button><button data-v="dec" aria-pressed="false">Decimals</button></div></div>
+        </div>
+        <p class="hint">Type integers, decimals or fractions like 1/3. Arrow keys nudge a value by 0.5 (Shift: 0.1); Enter moves to the next cell.</p>
+      </section>
+      <section class="glass" id="rres"></section>
+    </div>
+    <div class="stack">
+      <section class="glass" id="rstep">
+        <div class="rhead"><h2>Row reduction</h2>
+          <div class="seg" id="ralgo" role="group" aria-label="Algorithm"><button data-v="gauss" aria-pressed="false">Gaussian: REF</button><button data-v="gj" aria-pressed="true">Gauss–Jordan: RREF</button></div>
+        </div>
+        <div class="phase"><span id="rphase"></span><span id="rcount"></span></div>
+        <div class="rrefbox" style="margin:10px 0 4px"><div id="rmat"></div></div>
+        <div class="legend">
+          <span style="--c:var(--mint)">pivot</span><span style="--c:rgba(92,242,176,.45)">pivot row</span><span style="--c:rgba(139,108,255,.7)">pivot column</span><span style="--c:var(--amber)">row being changed</span>
+        </div>
+        <div class="opline" id="rop" aria-live="polite"></div>
+        <div class="ctrl rctl">
+          <button class="btn alt" id="rprev">Previous</button><button class="btn" id="rnext">Next</button>
+          <button class="btn alt" id="rplay">Play</button><button class="btn alt" id="rend">Finish</button><button class="btn alt" id="rrestart">Reset steps</button>
+        </div>
+        <div class="scrub"><input type="range" id="rscrub" min="0" max="0" value="0" aria-label="Step"><span id="rscrubv"></span></div>
+        <div id="redu" aria-live="polite"></div>
+      </section>
+      <section class="glass" id="rgeo">
+        <h2>Columns as vectors</h2>
+        <div class="geo" id="rgeobox">
+          <div id="rcvwrap">
+            <canvas id="rcv" aria-label="Column vectors of A in the plane"></canvas>
+            <div class="ctrl">
+              <label>View ±<span id="rvR">5</span><input type="range" id="rangeR" min="2" max="12" step="0.5" value="5" aria-label="View range"></label>
+              <label class="chk" style="margin:0"><input type="checkbox" id="rghost" checked> Show current-step columns</label>
+            </div>
+            <div class="legend">
+              <span style="--c:#e9edf8">filled tip: pivot column</span><span class="ring" style="--c:#e9edf8">ring tip: dependent column</span><span class="dash" style="--c:#e9edf8">dashed: column of current matrix</span><span style="--c:var(--amber)">span of the columns</span>
+            </div>
+          </div>
+          <div id="rcols"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="layout p4" id="p4" hidden>
+    <section class="glass" id="v3vecs">
+      <h2>3D vectors</h2>
+      <div id="v3list"></div>
+      <div class="chips" style="margin-top:12px">
+        <button class="chip" id="v3add">Add vector</button>
+        <button class="chip" id="v3rand">Randomize</button>
+        <button class="chip" id="v3reset">Reset</button>
+      </div>
+      <p class="hint">Drag on the scene to rotate, scroll to zoom. The checkbox includes or excludes a vector from the span.</p>
+      <dl class="facts" id="v3facts" style="margin-top:14px"></dl>
+    </section>
+
+    <section class="glass" id="v3viz">
+      <h3 class="eh">Span in ℝ³</h3>
+      <div class="c3wrap"><canvas id="c3v" aria-label="3D vector space"></canvas><div class="c3load" id="c3vload">Loading 3D engine…</div></div>
+      <div class="ctrl"><button class="btn" id="v3resetcam">Reset camera</button></div>
+      <div class="legend">
+        <span style="--c:var(--mint)">included vector</span><span style="--c:#4a5583">excluded vector</span>
+        <span style="--c:var(--amber)">span (line / plane)</span>
+      </div>
+    </section>
+
+    <section class="glass" id="m3in">
+      <h2>3×3 matrix A</h2>
+      <div class="mxwrap"><div class="mx" id="m3mx"></div></div>
+      <div class="chips" id="m3presets" aria-label="Presets"></div>
+      <p class="hint">Columns of A become the transformed vectors Ae₁, Ae₂, Ae₃ below.</p>
+      <dl class="facts" id="m3facts" style="margin-top:14px"></dl>
+    </section>
+
+    <section class="glass" id="m3viz">
+      <h3 class="eh">Columns as transformed basis vectors</h3>
+      <div class="c3wrap"><canvas id="c3m" aria-label="3D matrix transformation"></canvas><div class="c3load" id="c3mload">Loading 3D engine…</div></div>
+      <div class="ctrl"><button class="btn" id="m3resetcam">Reset camera</button></div>
+      <div class="legend">
+        <span class="dash" style="--c:#4a5583">e₁, e₂, e₃ (original basis)</span>
+        <span style="--c:var(--mint)">Ae₁</span><span style="--c:var(--coral)">Ae₂</span><span style="--c:var(--violet)">Ae₃</span>
+        <span style="--c:var(--amber)">span of the columns</span>
+      </div>
+    </section>
+
+    <section class="glass" id="nsin">
+      <div class="rhead"><h2>Null space explorer</h2></div>
+      <p class="hint">Uses matrix A from the <b>Row reduction</b> tab — edit it there to change the null space here.</p>
+      <div id="nsbody"></div>
+    </section>
+
+    <section class="glass" id="nsviz">
+      <h3 class="eh">Null space geometry</h3>
+      <div class="c3wrap" id="nscwrap"><canvas id="c3n" aria-label="Null space geometry"></canvas><div class="c3load" id="c3nload">Loading 3D engine…</div></div>
+      <p class="hint" id="nstoohigh" hidden>A₄-column matrix has a null space in ℝ⁴, which can't be drawn — the basis vectors above are its exact mathematical representation.</p>
+      <div class="ctrl" id="nscamctrl"><button class="btn" id="nsresetcam">Reset camera</button></div>
+      <div class="legend" id="nslegend">
+        <span style="--c:var(--amber)">null space (Ax = 0)</span><span class="dash" style="--c:#4a5583">coordinate axes</span>
+      </div>
+    </section>
+  </div>
+
+  <div id="p5" hidden>
+    <section class="glass" id="gaussSection" style="max-width:640px;margin:0 auto">
+      <h2>Gaussian elimination</h2>
+      <p class="hint" style="margin-top:-6px">True forward elimination to row-echelon form: every pivot search, row swap and row operation is shown as its own step, and the system is solved (unique / infinite / no solution) by real back-substitution — not Gauss&#8211;Jordan.</p>
+    <div class="sm-panel" id="sm-panel-gauss">
+      <div class="sm-row sm-mat-sizes">
+        <label>Equations (rows) <input type="number" id="sm4-rows" min="1" max="6" value="3"></label>
+        <label>Variables (cols) <input type="number" id="sm4-cols" min="1" max="6" value="3"></label>
+        <button class="chip" id="sm4-build" type="button">Build grid</button>
+        <button class="chip" id="sm4-example" type="button">Load example</button>
+      </div>
+      <div class="sm-row">
+        <label>Variable names (optional) <input type="text" id="sm4-varnames" placeholder="x, y, z" style="width:150px"></label>
+      </div>
+      <div class="sm-mat-gridwrap"><table class="sm-mat-grid" id="sm4-grid"></table></div>
+      <div class="sm-row">
+        <button class="btn" id="sm4-run">Solve</button>
+        <button class="chip" id="sm4-clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Cells accept integers, decimals, negatives, and fractions like <code>-3/4</code>. The last column is the right-hand side of each equation. This performs true Gaussian elimination to row-echelon form (no forced leading 1s, nothing cleared above a pivot) then interprets the result — it does not run Gauss-Jordan.</p>
+      <div class="sm-status" id="sm4-status" role="status" aria-live="polite"></div>
+      <div id="sm4-result"></div>
+      <div id="sm4-output"></div>
+    </div>
+    </section>
+  </div>
+  </div>
+  <div id="secCalc" hidden>
+  <div id="calc-shell">
+    <div class="sm-title">
+      <h2>Step-by-step polynomial algebra</h2>
+      <p class="hint">Pick a method below — each one is its own card, worked through one step at a time.</p>
+    </div>
+    <nav class="catbar" aria-label="Method">
+      <div class="tabstrip" id="sm-subtabs" role="group" aria-label="Method">
+        <button aria-pressed="true" data-sm="long">Long division</button>
+        <button aria-pressed="false" data-sm="synthetic">Synthetic division</button>
+        <button aria-pressed="false" data-sm="pfd">Partial fractions</button>
+      </div>
+    </nav>
+
+    <div class="stack calc-stack">
+    <section class="glass sm-panel" id="sm-panel-long">
+      <div class="sm-row sm-eqrow">
+        <div class="sm-mathbox" id="sm-dividend" contenteditable="true" role="textbox" aria-label="Dividend"></div>
+        <span class="sm-divsign" aria-hidden="true">÷</span>
+        <div class="sm-mathbox" id="sm-divisor" contenteditable="true" role="textbox" aria-label="Divisor"></div>
+      </div>
+      <div class="sm-row">
+        <label>Variable <input type="text" id="sm-var" value="x" maxlength="3"></label>
+        <button class="btn" id="sm-run">Solve</button>
+        <button class="chip" id="sm-clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Type <code>^</code> then digits for a power — the exponent gets its own small raised box, same as it will look in the rendered steps below. Works for any divisor.</p>
+      <div class="sm-status" id="sm-status" role="status" aria-live="polite"></div>
+      <div id="sm-result"></div>
+      <div id="sm-output"></div>
+    </section>
+
+    <section class="glass sm-panel" id="sm-panel-synthetic" hidden>
+      <div class="sm-row sm-eqrow">
+        <div class="sm-mathbox" id="sm2-dividend" contenteditable="true" role="textbox" aria-label="Dividend"></div>
+        <span class="sm-divsign" aria-hidden="true">÷</span>
+        <div class="sm-mathbox" id="sm2-divisor" contenteditable="true" role="textbox" aria-label="Divisor"></div>
+      </div>
+      <div class="sm-row">
+        <label>Variable <input type="text" id="sm2-var" value="x" maxlength="3"></label>
+        <button class="btn" id="sm2-run">Solve</button>
+        <button class="chip" id="sm2-clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Synthetic division only works for a <strong>monic linear</strong> divisor — something like <code>x - 2</code> or <code>x + 3</code> (leading coefficient 1). For anything else, use Long division.</p>
+      <div class="sm-status" id="sm2-status" role="status" aria-live="polite"></div>
+      <div id="sm2-result"></div>
+      <div id="sm2-table"></div>
+      <div id="sm2-output"></div>
+    </section>
+
+    <section class="glass sm-panel" id="sm-panel-pfd" hidden>
+      <div class="sm-pfd-frac">
+        <div class="sm-pfd-lbl">Numerator</div>
+        <div class="sm-mathbox" id="sm3-num" contenteditable="true" role="textbox" aria-label="Numerator"></div>
+        <hr class="sm-pfd-bar">
+        <div class="sm-pfd-lbl">Denominator <em>— already factored</em></div>
+        <div class="sm-mathbox" id="sm3-den" contenteditable="true" role="textbox" aria-label="Denominator, already factored"></div>
+      </div>
+      <p class="sm-pfd-note"><b>Note:</b>&nbsp;the denominator must be entered already factored — e.g. <code>(x-2)(x+1)^2(x^2+1)</code>, not the expanded form. This solver decomposes; it does not factor for you.</p>
+      <div class="sm-row">
+        <label>Variable <input type="text" id="sm3-var" value="x" maxlength="3"></label>
+        <button class="btn" id="sm3-run">Solve</button>
+        <button class="chip" id="sm3-clear" type="button">Clear</button>
+      </div>
+      <div class="sm-status" id="sm3-status" role="status" aria-live="polite"></div>
+      <div id="sm3-result"></div>
+      <div id="sm3-output"></div>
+    </section>
+    </div>
+  </div>
+  </div>
+</div>
+
+<footer class="sitefoot">
+  <div class="wrap footwrap">
+    <div class="footcol">
+      <div class="brand"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><path d="M5 29V5M5 29h24" stroke="#4a5583" stroke-width="1.5" fill="none"/><path d="M5 29L26 29" stroke="#5cf2b0" stroke-width="2.4"/><path d="M5 29L11 8" stroke="#ff6b6b" stroke-width="2.4"/><path d="M5 29L26 29L32 8L11 8Z" fill="rgba(139,108,255,.25)" stroke="#8b6cff" stroke-width="1"/></svg>
+        <div><b>VectorLab</b><p>Interactive Linear Algebra &amp; Step-by-Step Algebra</p></div>
+      </div>
+      <p class="ai-disclosure">This website was built using AI-assisted vibecoding.<br>Designed and developed by Subhranil Saha with AI assistance.</p>
+    </div>
+    <div class="footcol">
+      <h4>Legal</h4>
+      <a href="#privacy" class="legal-link" data-legal="privacy">Privacy Policy</a>
+      <a href="#cookies" class="legal-link" data-legal="cookies">Cookie Policy</a>
+      <a href="#terms" class="legal-link" data-legal="terms">Terms of Use</a>
+      <a href="mailto:subhranilsaha69@gmail.com" class="legal-link">Contact</a>
+    </div>
+    <div class="footcol">
+      <h4>Creator</h4>
+      <p>Subhranil Saha</p>
+      <p>© 2026 Subhranil Saha. All rights reserved.</p>
+      <p><a href="mailto:subhranilsaha69@gmail.com" class="legal-link">subhranilsaha69@gmail.com</a></p>
+    </div>
+  </div>
+  <div class="wrap">
+    <!-- Ad slot: footer banner -->
+    <div class="ad-slot ad-footer">
+      <span class="ad-slot-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="3333333333"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+  <p class="endnote">ai can write the perfect text. it can't regret sending it.</p>
+</footer>
+
+<div class="legaloverlay" id="legalOverlay" hidden>
+  <div class="legalcard glass">
+    <button class="btn alt legalclose" id="legalClose">← Back to VectorLab</button>
+    <div id="legalContent"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>window.THREE||document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>');</script>
+<!-- ================= Algebra engine (pure math, no DOM/canvas deps) ================= -->
+<script src="js/algebra/stepmath-engine.js"></script>
+<!-- ================= Algebra UI (StepMath demo panels) ================= -->
+<script src="js/algebra/stepmath-ui.js"></script>
+<!-- ================= Core utilities & shared state ================= -->
+<script src="js/core/utils.js"></script>
+<!-- ================= Linear algebra ================= -->
+<script src="js/linear-algebra/matrix-core.js"></script>
+<script src="js/linear-algebra/linear-combination.js"></script>
+<script src="js/linear-algebra/vector-explorer.js"></script>
+<script src="js/linear-algebra/row-reduction.js"></script>
+<!-- ================= Core: tab/category wiring & app bootstrap ================= -->
+<script src="js/core/tabs.js"></script>
+<!-- ================= 3D visualization ================= -->
+<script src="js/visualization/three-helpers.js"></script>
+<script src="js/visualization/vector3d.js"></script>
+<script src="js/visualization/matrix-transform3d.js"></script>
+<script src="js/visualization/null-space.js"></script>
+<!-- ================= Core: legal pages ================= -->
+<script src="js/core/legal.js"></script>
+</body>
+</html>
