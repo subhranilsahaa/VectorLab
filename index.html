@@ -19,6 +19,7 @@
     <div class="seg" id="cats" role="group" aria-label="Category">
       <button aria-pressed="true" data-cat="linalg">Vector</button>
       <button aria-pressed="false" data-cat="calc">Higher Algebra</button>
+      <button aria-pressed="false" data-cat="calculus">Calculus</button>
     </div>
   </header>
 
@@ -166,6 +167,185 @@
             </div>
             <div class="legend">
               <span style="--c:#e9edf8">filled tip: pivot column</span><span class="ring" style="--c:#e9edf8">ring tip: dependent column</span><span class="dash" style="--c:#e9edf8">dashed: column of current matrix</span><span style="--c:var(--amber)">span of the columns</span>
+            </div>
+          </div>
+          <div id="rcols"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="layout p4" id="p4" hidden>
+    <section class="glass" id="v3vecs">
+      <h2>3D vectors</h2>
+      <div id="v3list"></div>
+      <div class="chips" style="margin-top:12px">
+        <button class="chip" id="v3add">Add vector</button>
+        <button class="chip" id="v3rand">Randomize</button>
+        <button class="chip" id="v3reset">Reset</button>
+      </div>
+      <p class="hint">Drag on the scene to rotate, scroll to zoom. The checkbox includes or excludes a vector from the span.</p>
+      <dl class="facts" id="v3facts" style="margin-top:14px"></dl>
+    </section>
+
+    <section class="glass" id="v3viz">
+      <h3 class="eh">Span in ℝ³</h3>
+      <div class="c3wrap"><canvas id="c3v" aria-label="3D vector space"></canvas><div class="c3load" id="c3vload">Loading 3D engine…</div></div>
+      <div class="ctrl"><button class="btn" id="v3resetcam">Reset camera</button></div>
+      <div class="legend">
+        <span style="--c:var(--mint)">included vector</span><span style="--c:#4a5583">excluded vector</span>
+        <span style="--c:var(--amber)">span (line / plane)</span>
+      </div>
+    </section>
+
+    <section class="glass" id="m3in">
+      <h2>3×3 matrix A</h2>
+      <div class="mxwrap"><div class="mx" id="m3mx"></div></div>
+      <div class="chips" id="m3presets" aria-label="Presets"></div>
+      <p class="hint">Columns of A become the transformed vectors Ae₁, Ae₂, Ae₃ below.</p>
+      <dl class="facts" id="m3facts" style="margin-top:14px"></dl>
+    </section>
+
+    <section class="glass" id="m3viz">
+      <h3 class="eh">Columns as transformed basis vectors</h3>
+      <div class="c3wrap"><canvas id="c3m" aria-label="3D matrix transformation"></canvas><div class="c3load" id="c3mload">Loading 3D engine…</div></div>
+      <div class="ctrl"><button class="btn" id="m3resetcam">Reset camera</button></div>
+      <div class="legend">
+        <span class="dash" style="--c:#4a5583">e₁, e₂, e₃ (original basis)</span>
+        <span style="--c:var(--mint)">Ae₁</span><span style="--c:var(--coral)">Ae₂</span><span style="--c:var(--violet)">Ae₃</span>
+        <span style="--c:var(--amber)">span of the columns</span>
+      </div>
+    </section>
+
+    <section class="glass" id="nsin">
+      <div class="rhead"><h2>Null space explorer</h2></div>
+      <p class="hint">Uses matrix A from the <b>Row reduction</b> tab — edit it there to change the null space here.</p>
+      <div id="nsbody"></div>
+    </section>
+
+    <section class="glass" id="nsviz">
+      <h3 class="eh">Null space geometry</h3>
+      <div class="c3wrap" id="nscwrap"><canvas id="c3n" aria-label="Null space geometry"></canvas><div class="c3load" id="c3nload">Loading 3D engine…</div></div>
+      <p class="hint" id="nstoohigh" hidden>A₄-column matrix has a null space in ℝ⁴, which can't be drawn — the basis vectors above are its exact mathematical representation.</p>
+      <div class="ctrl" id="nscamctrl"><button class="btn" id="nsresetcam">Reset camera</button></div>
+      <div class="legend" id="nslegend">
+        <span style="--c:var(--amber)">null space (Ax = 0)</span><span class="dash" style="--c:#4a5583">coordinate axes</span>
+      </div>
+    </section>
+  </div>
+
+  <div id="p5" hidden>
+    <section class="glass" id="gaussSection" style="max-width:640px;margin:0 auto">
+      <h2>Gaussian elimination</h2>
+      <p class="hint" style="margin-top:-6px">True forward elimination to row-echelon form: every pivot search, row swap and row operation is shown as its own step, and the system is solved (unique / infinite / no solution) by real back-substitution — not Gauss&#8211;Jordan.</p>
+    <div class="sm-panel" id="sm-panel-gauss">
+      <div class="sm-row sm-mat-sizes">
+        <label>Equations (rows) <input type="number" id="sm4-rows" min="1" max="6" value="3"></label>
+        <label>Variables (cols) <input type="number" id="sm4-cols" min="1" max="6" value="3"></label>
+        <button class="chip" id="sm4-build" type="button">Build grid</button>
+        <button class="chip" id="sm4-example" type="button">Load example</button>
+      </div>
+      <div class="sm-row">
+        <label>Variable names (optional) <input type="text" id="sm4-varnames" placeholder="x, y, z" style="width:150px"></label>
+      </div>
+      <div class="sm-mat-gridwrap"><table class="sm-mat-grid" id="sm4-grid"></table></div>
+      <div class="sm-row">
+        <button class="btn" id="sm4-run">Solve</button>
+        <button class="chip" id="sm4-clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Cells accept integers, decimals, negatives, and fractions like <code>-3/4</code>. The last column is the right-hand side of each equation. This performs true Gaussian elimination to row-echelon form (no forced leading 1s, nothing cleared above a pivot) then interprets the result — it does not run Gauss-Jordan.</p>
+      <div class="sm-status" id="sm4-status" role="status" aria-live="polite"></div>
+      <div id="sm4-result"></div>
+      <div id="sm4-output"></div>
+    </div>
+    </section>
+  </div>
+  </div>
+  <div id="secCalc" hidden>
+  <div id="calc-shell">
+    <div class="sm-title">
+      <h2>Step-by-step polynomial algebra</h2>
+      <p class="hint">Pick a method below — each one is its own card, worked through one step at a time.</p>
+    </div>
+    <nav class="catbar" aria-label="Method">
+      <div class="tabstrip" id="sm-subtabs" role="group" aria-label="Method">
+        <button aria-pressed="true" data-sm="long">Long division</button>
+        <button aria-pressed="false" data-sm="synthetic">Synthetic division</button>
+        <button aria-pressed="false" data-sm="pfd">Partial fractions</button>
+      </div>
+    </nav>
+
+    <div class="stack calc-stack">
+    <section class="glass sm-panel" id="sm-panel-long">
+      <div class="sm-row sm-eqrow">
+        <div class="sm-mathbox" id="sm-dividend" contenteditable="true" role="textbox" aria-label="Dividend"></div>
+        <span class="sm-divsign" aria-hidden="true">÷</span>
+        <div class="sm-mathbox" id="sm-divisor" contenteditable="true" role="textbox" aria-label="Divisor"></div>
+      </div>
+      <div class="sm-row">
+        <label>Variable <input type="text" id="sm-var" value="x" maxlength="3"></label>
+        <button class="btn" id="sm-run">Solve</button>
+        <button class="chip" id="sm-clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Type <code>^</code> then digits for a power — the exponent gets its own small raised box, same as it will look in the rendered steps below. Works for any divisor.</p>
+      <div class="sm-status" id="sm-status" role="status" aria-live="polite"></div>
+      <div id="sm-result"></div>
+      <div id="sm-output"></div>
+    </section>
+
+    <section class="glass sm-panel" id="sm-panel-synthetic" hidden>
+      <div class="sm-row sm-eqrow">
+        <div class="sm-mathbox" id="sm2-dividend" contenteditable="true" role="textbox" aria-label="Dividend"></div>
+        <span class="sm-divsign" aria-hidden="true">÷</span>
+        <div class="sm-mathbox" id="sm2-divisor" contenteditable="true" role="textbox" aria-label="Divisor"></div>
+      </div>
+      <div class="sm-row">
+        <label>Variable <input type="text" id="sm2-var" value="x" maxlength="3"></label>
+        <button class="btn" id="sm2-run">Solve</button>
+        <button class="chip" id="sm2-clear" type="button">Clear</button>
+      </div>
+      <p class="hint">Synthetic division only works for a <strong>monic linear</strong> divisor — something like <code>x - 2</code> or <code>x + 3</code> (leading coefficient 1). For anything else, use Long division.</p>
+      <div class="sm-status" id="sm2-status" role="status" aria-live="polite"></div>
+      <div id="sm2-result"></div>
+      <div id="sm2-table"></div>
+      <div id="sm2-output"></div>
+    </section>
+
+    <section class="glass sm-panel" id="sm-panel-pfd" hidden>
+      <div class="sm-pfd-frac">
+        <div class="sm-pfd-lbl">Numerator</div>
+        <div class="sm-mathbox" id="sm3-num" contenteditable="true" role="textbox" aria-label="Numerator"></div>
+        <hr class="sm-pfd-bar">
+        <div class="sm-pfd-lbl">Denominator <em>— already factored</em></div>
+        <div class="sm-mathbox" id="sm3-den" contenteditable="true" role="textbox" aria-label="Denominator, already factored"></div>
+      </div>
+      <p class="sm-pfd-note"><b>Note:</b>&nbsp;the denominator must be entered already factored — e.g. <code>(x-2)(x+1)^2(x^2+1)</code>, not the expanded form. This solver decomposes; it does not factor for you.</p>
+      <div class="sm-row">
+        <label>Variable <input type="text" id="sm3-var" value="x" maxlength="3"></label>
+        <button class="btn" id="sm3-run">Solve</button>
+        <button class="chip" id="sm3-clear" type="button">Clear</button>
+      </div>
+      <div class="sm-status" id="sm3-status" role="status" aria-live="polite"></div>
+      <div id="sm3-result"></div>
+      <div id="sm3-output"></div>
+    </section>
+    </div>
+  </div>
+  </div>
+  <div id="secCalculus" hidden>
+    <section class="glass comingsoon">
+      <h2>Calculus</h2>
+      <p class="comingsoon-msg">Coming soon!!</p>
+      <p class="hint">Differentiation, limits, integration and more are on the way — see the roadmap for what's planned.</p>
+    </section>
+  </div>
+</div>
+
+<footer class="sitefoot">
+  <div class="wrap footwrap">
+    <div class="footcol">
+      <div class="brand"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><path d="M5 29V5M5 29h24" stroke="#4a5583" stroke-width="1.5" fill="none"/><path d="M5 29L26 29" stroke="#5cf2b0" stroke-width="2.4"/><path d="M5 29L11 8" stroke="#ff6b6b" stroke-width="2.4"/><path d="M5 29L26 29L32 8L11 8Z" fill="rgba(139,108,255,.25)" stroke="#8b6cff" stroke-width="1"/></svg>
+        <div><b>VectorLab</b><p>Interactive mns</span>
             </div>
           </div>
           <div id="rcols"></div>
