@@ -9,9 +9,10 @@ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(+b.da
 let currentCat='linalg';
 function showCategory(cat){
   currentCat=cat;
-  const isLA=cat==='linalg';
+  const isLA=cat==='linalg',isAlgebra=cat==='calc',isCalculus=cat==='calculus';
   $('#secLinAlg').hidden=!isLA;
-  $('#secCalc').hidden=isLA;
+  $('#secCalc').hidden=!isAlgebra;
+  $('#secCalculus').hidden=!isCalculus;
   $('#linalgNav').hidden=!isLA;
   document.querySelectorAll('#cats button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cat===cat));
   if(isLA)redraw();
