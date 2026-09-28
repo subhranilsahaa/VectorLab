@@ -50,7 +50,7 @@ function make3D(canvas){
   canvas.addEventListener('wheel',e=>{e.preventDefault();orb.r=Math.min(22,Math.max(3.5,orb.r*(1+e.deltaY*.001)));updateCam();render();},{passive:false});
   function resize(){
     const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return false;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(r.width,r.height,false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,3));renderer.setSize(r.width,r.height,false);
     camera.aspect=r.width/r.height;camera.updateProjectionMatrix();return true;
   }
   function render(){renderer.render(scene,camera);}
@@ -59,6 +59,8 @@ function make3D(canvas){
   function frame(){orb.r=Math.min(22,Math.max(4.5,fitMag*2.1+2.8));orb.theta=.55;orb.phi=1.15;updateCam();}
   function reset(){frame();render();}
   function clearContent(){while(content.children.length){const o=content.children.pop();o.geometry&&o.geometry.dispose();o.material&&o.material.dispose&&o.material.dispose();content.remove(o);}}
+  /* keep the drawing buffer matched to the on-screen size (fixes blurry/stretched canvases that were never resized) */
+  if(window.ResizeObserver)new ResizeObserver(()=>{if(resize())render();}).observe(canvas);
   return {content,orb,resize,render,reset,clearContent,setFit,frame};
 }
 function addArrow3(host,v,color,label){
