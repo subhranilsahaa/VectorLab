@@ -1,0 +1,39 @@
+/* Calculus section — reuses VectorLab tokens (.glass, .chip, .btn, .seg, .sm-*) */
+#calculus-shell{max-width:920px;margin:0 auto}
+.cl-panel[hidden],#cl-i-body[hidden],#cl-l-gwrap[hidden],#cl-d-gwrap[hidden],.sm-result[hidden]{display:none}
+.cl-h{font-family:var(--math);font-size:22px;font-weight:600;margin:0 0 8px}
+.cl-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:16px}
+.cl-card{font:inherit;text-align:left;color:var(--ink);display:flex;flex-direction:column;gap:6px;padding:16px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;cursor:pointer;transition:border-color .2s,background .2s,transform .15s}
+.cl-card:hover,.cl-card:focus-visible{border-color:rgba(92,242,176,.5);background:rgba(92,242,176,.06)}.cl-card:active{transform:scale(.99)}
+.cl-card b{font-size:15px}.cl-card span:last-child{color:var(--dim);font-size:12.5px}
+.cl-ic{font-family:var(--math);font-style:italic;font-size:22px;color:var(--mint)}
+.sm-row input.cl-in,.cl-in{width:min(320px,100%);font-family:var(--math);font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:7px 10px}
+.sm-row input.cl-sm,.cl-in.cl-sm{width:84px}select.cl-in option{background:#0b1020}
+.cl-line{overflow-x:auto;padding:3px 0;font-size:17px}.cl-line math{font-size:1.1em}
+.cl-rule{margin:4px 0 0;color:var(--amber);font-size:13px}
+.cl-graph{width:100%;overflow:hidden;margin-top:14px}
+.cl-graph svg{max-width:100%;height:auto;font-family:var(--math)}
+.cl-graph .function-plot{font:10px sans-serif}.cl-graph text,.cl-graph .tick text{fill:var(--dim)}
+.cl-graph .domain,.cl-graph .tick line{stroke:#4a5583}.cl-graph .grid .tick line,.cl-graph .x.axis .tick line{stroke:rgba(255,255,255,.07)}
+.cl-graph .annotations path{stroke:var(--dim);stroke-dasharray:4}
+.cl-graph .canvas{fill:none}.cl-graph .zoombox{fill:none}
+@media (max-width:620px){#cl-l-dir button{padding:5px 9px}.cl-h{font-size:19px}}
+
+.sm-row label{white-space:nowrap}
+
+/* Integration */
+.cl-sub{font-family:var(--ui);font-size:12px;font-weight:500;color:var(--dim);margin-left:6px;letter-spacing:.03em;text-transform:uppercase}
+.cl-sec{margin:18px 0 8px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+#cl-i-body>.cl-sec:first-child{margin-top:6px}
+#cl-i-out .sm-step:first-of-type{border-top:0}
+.cl-final{background:rgba(92,242,176,.1);border:1px solid rgba(92,242,176,.5);border-radius:16px;padding:18px 20px;overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left}
+.cl-final math{font-size:2em;color:var(--mint)}
+.cl-final .sm-term{display:inline-block;white-space:nowrap}
+@media (max-width:620px){.cl-final{padding:14px}.cl-final math{font-size:1.2em}#cl-i-f{width:100%}}
+#cl-i-res math{font-size:1.25em}
+
+/* Definite integration */
+.cl-more{margin-top:8px}.cl-more summary{cursor:pointer;color:var(--mint);font-size:13px}
+.cl-more .sm-step{margin-left:8px}
+#cl-di-res math{font-size:1.25em}#cl-di-res .cl-blk{display:block;overflow-x:auto}
+@media (max-width:620px){#cl-di-f{width:100%}.sm-row input.cl-sm{width:78px}#cl-defint .sm-row{flex-wrap:wrap}}
