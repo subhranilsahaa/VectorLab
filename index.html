@@ -403,80 +403,136 @@
   </div>
   <div id="secCalculus" hidden>
   <div id="calculus-shell">
-    <nav class="catbar" aria-label="Calculus topic">
+    <nav class="catbar" id="cl-tabnav" aria-label="Calculus topic">
       <div class="tabstrip" id="cl-tabs" role="group" aria-label="Calculus topic">
-        <button aria-pressed="true" data-cl="home">Overview</button><button aria-pressed="false" data-cl="limits">Limits</button><button aria-pressed="false" data-cl="diff">Differentiation</button><button aria-pressed="false" data-cl="int">Integration</button><button aria-pressed="false" data-cl="defint">Definite Integral</button>
+        <button type="button" aria-pressed="true" data-cl="home">Overview</button><button type="button" aria-pressed="false" data-cl="limits">Limits</button><button type="button" aria-pressed="false" data-cl="diff">Differentiation</button><button type="button" aria-pressed="false" data-cl="int">Indefinite Integral</button><button type="button" aria-pressed="false" data-cl="defint">Definite Integral</button><button type="button" aria-pressed="false" data-cl="guides">Methods &amp; Guides</button>
       </div>
     </nav>
-    <section class="glass cl-panel" id="cl-home">
-      <h2 class="cl-h">Calculus, worked step by step</h2>
-      <p class="hint">Type a function and see the answer <em>and</em> the reasoning: which rule applies, what each piece differentiates to, and how the pieces combine. The computation is done by the Nerdamer symbolic library; VectorLab explains it.</p>
+    <section class="cl-panel" id="cl-home" aria-labelledby="cl-home-title">
+      <div class="cl-phead"><div><h2 class="cl-h" id="cl-home-title">Calculus, worked step by step</h2><p class="cl-lede">Type a function and see the answer <em>and</em> the reasoning: which rule applies, what each piece becomes, and how the pieces combine. The computation is done by the Nerdamer symbolic library; VectorLab explains it.</p></div></div>
       <div class="cl-cards">
-        <button class="cl-card" type="button" data-cl-go="limits"><span class="cl-ic">lim</span><b>Limits</b><span>Polynomial, rational, trig, exponential and logarithmic limits, including one-sided limits and limits at infinity.</span></button>
-        <button class="cl-card" type="button" data-cl-go="diff"><span class="cl-ic">d/dx</span><b>Differentiation</b><span>Power, product, quotient and chain rules, with higher derivatives and a plot of f and its derivative.</span></button>
-        <button class="cl-card" type="button" data-cl-go="int"><span class="cl-ic">&int;</span><b>Integration</b><span>Indefinite integrals: powers, trig, exponential and logarithmic functions, parts and substitution, with the rule named at each step.</span></button>
-<button class="cl-card" type="button" data-cl-go="defint"><span class="cl-ic">&int;<sub style="font-size:.5em">a</sub><sup style="font-size:.5em">b</sup></span><b>Definite Integral</b><span>Integrate between two bounds: the antiderivative, the substitution of both limits, and the exact and decimal answer.</span></button>
+        <button class="cl-tile" type="button" data-cl-go="limits"><span class="cl-ic" data-tex="\lim">lim</span><b>Limits</b><span class="cl-td">Polynomial, rational, trig, exponential and logarithmic limits, including one-sided limits and limits at infinity.</span></button>
+        <button class="cl-tile" type="button" data-cl-go="diff"><span class="cl-ic" data-tex="\tfrac{d}{dx}">d/dx</span><b>Differentiation</b><span class="cl-td">Power, product, quotient and chain rules, with higher derivatives and a plot of f and its derivative.</span></button>
+        <button class="cl-tile" type="button" data-cl-go="int"><span class="cl-ic" data-tex="\int">∫</span><b>Indefinite Integral</b><span class="cl-td">Powers, trig, exponential and logarithmic functions, parts and substitution, with the rule named at each step.</span></button>
+        <button class="cl-tile" type="button" data-cl-go="defint"><span class="cl-ic" data-tex="\int_a^b">∫ₐᵇ</span><b>Definite Integral</b><span class="cl-td">Integrate between two bounds: the antiderivative, the substitution of both limits, and the exact and decimal answer.</span></button>
       </div>
-      <p class="hint" style="margin-top:14px">Series and more are planned for later.</p>
+      <div class="cl-guidebanner"><div><b>New to a method?</b><span>Short guides explain when and why each limit, derivative and integral technique is used, with a small example.</span></div><button class="btn" type="button" data-cl-go="guides">Open Methods &amp; Guides</button></div>
+      <p class="cl-foot">Series and more are planned for later.</p>
     </section>
-    <section class="glass cl-panel" id="cl-limits" hidden>
-      <h2 class="cl-h">Limits</h2>
-      <div class="sm-row"><label>f(x) = <input class="cl-in" id="cl-l-f" type="text" value="sin(x)/x" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Function of x"></label></div>
-      <div class="sm-row"><label>x → <input class="cl-in cl-sm" id="cl-l-a" type="text" value="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Approach value"></label>
-        <div class="seg" id="cl-l-dir" role="group" aria-label="Direction"><button type="button" data-v="both" aria-pressed="true">Both sides</button><button type="button" data-v="left" aria-pressed="false">Left (⁻)</button><button type="button" data-v="right" aria-pressed="false">Right (⁺)</button></div>
-        <button class="btn" id="cl-l-run" type="button">Calculate</button></div>
-      <div class="chips" id="cl-l-ex" aria-label="Examples"></div>
-      <p class="hint">Use <code>^</code> for powers; <code>sin cos tan ln log exp sqrt abs pi e</code>; <code>inf</code> or <code>-inf</code> for infinity.</p>
-      <div class="sm-status" id="cl-l-status" role="status" aria-live="polite"></div>
-      <div class="sm-result" id="cl-l-res" hidden></div>
-      <div id="cl-l-out"></div>
-      <div id="cl-l-gwrap" hidden><div class="cl-graph" id="cl-l-graph"></div><div class="legend" id="cl-l-legend"></div></div>
-    </section>
-    <section class="glass cl-panel" id="cl-diff" hidden>
-      <h2 class="cl-h">Differentiation</h2>
-      <div class="sm-row"><label>f(x) = <input class="cl-in" id="cl-d-f" type="text" value="sin(x^2)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Function of x"></label></div>
-      <div class="sm-row"><label>Derivative order <select class="cl-in cl-sm" id="cl-d-n" aria-label="Derivative order"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></label>
-        <button class="btn" id="cl-d-run" type="button">Differentiate</button></div>
-      <div class="chips" id="cl-d-ex" aria-label="Examples"></div>
-      <p class="hint">Use <code>^</code> for powers; <code>sin cos tan ln log exp sqrt abs pi e</code>. Implicit products like <code>3x</code> work.</p>
-      <div class="sm-status" id="cl-d-status" role="status" aria-live="polite"></div>
-      <div class="sm-result" id="cl-d-res" hidden></div>
-      <div id="cl-d-out"></div>
-      <div id="cl-d-gwrap" hidden><div class="cl-graph" id="cl-d-graph"></div><div class="legend" id="cl-d-legend"></div></div>
-    </section>
-    <section class="glass cl-panel" id="cl-int" hidden>
-      <h2 class="cl-h">Integration <span class="cl-sub">indefinite</span></h2>
-      <div class="sm-row"><label>&int; <input class="cl-in" id="cl-i-f" type="text" value="x*e^x" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Function of x to integrate"> dx</label>
-        <button class="btn" id="cl-i-run" type="button">Integrate</button></div>
-      <div class="chips" id="cl-i-ex" aria-label="Examples"></div>
-      <p class="hint">Use <code>^</code> for powers; <code>sin cos tan sec ln log exp sqrt pi e</code>. Implicit products like <code>3x</code> work. Variable: <code>x</code>.</p>
-      <div class="sm-status" id="cl-i-status" role="status" aria-live="polite"></div>
-      <div id="cl-i-body" hidden>
-        <h3 class="cl-sec">Integral</h3>
-        <div class="sm-result" id="cl-i-res"></div>
-        <h3 class="cl-sec">Solution</h3>
-        <div id="cl-i-out"></div>
-        <h3 class="cl-sec">Final Answer</h3>
-        <div class="cl-final" id="cl-i-final"></div>
+    <section class="cl-panel" id="cl-limits" hidden aria-labelledby="cl-l-title">
+      <div class="cl-phead">
+        <div><h2 class="cl-h" id="cl-l-title">Limits</h2><p class="cl-lede">Find the value f(x) approaches as x gets close to a point or grows without bound. Check from both sides, or from one side only.</p></div>
+        <a class="gpill" href="/guides/calculus-limits.html"><i>i</i>Method guide</a>
+      </div>
+      <div class="cl-grid">
+        <div class="glass cl-inputcard">
+          <form class="cl-form" id="cl-l-form" novalidate>
+            <div class="cl-field"><label class="cl-flabel" for="cl-l-f">Function</label><div class="cl-inwrap"><span class="cl-pre" data-tex="f(x)=">f(x)=</span><input class="cl-in" id="cl-l-f" type="text" value="sin(x)/x" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Function of x"></div></div>
+            <div class="cl-field"><label class="cl-flabel" for="cl-l-a">Approach value <small>use <code>inf</code> or <code>-inf</code> for infinity</small></label><div class="cl-inwrap"><span class="cl-pre" data-tex="x\to">x →</span><input class="cl-in" id="cl-l-a" type="text" value="0" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Approach value"></div></div>
+            <div class="cl-field"><span class="cl-flabel" id="cl-l-dirlbl">Direction</span><div class="seg cl-seg" id="cl-l-dir" role="group" aria-labelledby="cl-l-dirlbl"><button type="button" data-v="both" aria-pressed="true">Both sides</button><button type="button" data-v="left" aria-pressed="false">From the left</button><button type="button" data-v="right" aria-pressed="false">From the right</button></div></div>
+            <div class="cl-prev" id="cl-l-prev" aria-live="polite"><b>Reads as</b><span class="cl-pv" id="cl-l-pv"><span class="cl-pm">Type above and it appears here as math.</span></span></div>
+            <button class="btn cl-go" id="cl-l-run" type="submit">Find the limit</button>
+          </form>
+          <div class="cl-ex"><p class="cl-exl">Try an example</p><div class="cl-chips" id="cl-l-ex" role="group" aria-label="Examples"></div></div>
+          <details class="cl-tips"><summary>Input tips</summary><ul><li>Powers: <code>x^2</code>. Products: <code>3x</code> or <code>3*x</code>.</li><li>Functions: <code>sin cos tan sec ln log exp sqrt abs</code>; constants <code>pi</code> and <code>e</code>.</li><li>Infinity: <code>inf</code> or <code>-inf</code>. Left and right limits are only used for finite points.</li></ul></details>
+        </div>
+        <div class="cl-out" id="cl-l-out">
+          <div class="cl-empty" id="cl-l-empty"><span class="cl-emic" aria-hidden="true">lim</span><b>Find a limit</b><p>Enter a function and the value x approaches, or choose an example. You will get the answer, the reasoning, and a graph around that point.</p></div>
+          <div class="cl-loading" id="cl-l-loading" role="status" hidden><div class="cl-loadrow"><span class="cl-spin" aria-hidden="true"></span><span id="cl-l-loadmsg">Calculating…</span></div><div class="cl-skel w1"></div><div class="cl-skel w2"></div><div class="cl-skel w3"></div></div>
+          <div class="cl-error" id="cl-l-error" role="alert" hidden><span class="cl-erric" aria-hidden="true">!</span><div><b>That didn’t work</b><p id="cl-l-errmsg"></p><small>Check brackets and operators, then try again, or pick one of the examples.</small></div></div>
+          <div class="cl-result" id="cl-l-result" hidden>
+            <div class="cl-answer"><p class="cl-alabel" id="cl-l-alabel">Answer</p><div class="cl-amath" id="cl-l-answer"></div><p class="cl-ahint" id="cl-l-ahint" hidden></p></div>
+            <div class="cl-card"><h3 class="cl-sec">Step-by-step solution <span id="cl-l-rule"></span></h3><div id="cl-l-steps"></div></div>
+            <div class="cl-card cl-graphcard" id="cl-l-gwrap" hidden><h3 class="cl-sec">Graph</h3><div class="cl-graph" id="cl-l-graph"></div><div class="legend" id="cl-l-legend"></div></div>
+          </div>
+        </div>
       </div>
     </section>
-    <section class="glass cl-panel" id="cl-defint" hidden>
-      <h2 class="cl-h">Integration <span class="cl-sub">definite</span></h2>
-      <div class="sm-row"><label>f(x) = <input class="cl-in" id="cl-di-f" type="text" value="x^2" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Function of x to integrate"></label></div>
-      <div class="sm-row"><label>Lower bound a <input class="cl-in cl-sm" id="cl-di-a" type="text" value="0" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Lower bound a"></label>
-        <label>Upper bound b <input class="cl-in cl-sm" id="cl-di-b" type="text" value="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Upper bound b"></label>
-        <button class="btn" id="cl-di-run" type="button">Evaluate</button></div>
-      <div class="chips" id="cl-di-ex" aria-label="Examples"></div>
-      <p class="hint">Use <code>^</code> for powers; <code>sin cos tan ln exp sqrt pi e</code>. Bounds can be numbers, fractions or constants such as <code>pi</code>, <code>1/2</code>, <code>sqrt(2)</code>. Variable: <code>x</code>.</p>
-      <div class="sm-status" id="cl-di-status" role="status" aria-live="polite"></div>
-      <div id="cl-di-body" hidden>
-        <h3 class="cl-sec">Integral</h3>
-        <div class="sm-result" id="cl-di-res"></div>
-        <h3 class="cl-sec">Solution</h3>
-        <div id="cl-di-out"></div>
-        <h3 class="cl-sec">Final Answer</h3>
-        <div class="cl-final" id="cl-di-final"></div>
+    <section class="cl-panel" id="cl-diff" hidden aria-labelledby="cl-d-title">
+      <div class="cl-phead">
+        <div><h2 class="cl-h" id="cl-d-title">Differentiation</h2><p class="cl-lede">Differentiate a function up to four times. The rule is named, each piece is worked out, and f and its derivative are plotted together.</p></div>
+        <a class="gpill" href="/guides/calculus-differentiation.html"><i>i</i>Method guide</a>
       </div>
+      <div class="cl-grid">
+        <div class="glass cl-inputcard">
+          <form class="cl-form" id="cl-d-form" novalidate>
+            <div class="cl-field"><label class="cl-flabel" for="cl-d-f">Function</label><div class="cl-inwrap"><span class="cl-pre" data-tex="f(x)=">f(x)=</span><input class="cl-in" id="cl-d-f" type="text" value="sin(x^2)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Function of x"></div></div>
+            <div class="cl-field"><span class="cl-flabel" id="cl-d-nlbl">Derivative order</span><div class="seg cl-seg" id="cl-d-n" role="group" aria-labelledby="cl-d-nlbl"><button type="button" data-v="1" aria-pressed="true">1st</button><button type="button" data-v="2" aria-pressed="false">2nd</button><button type="button" data-v="3" aria-pressed="false">3rd</button><button type="button" data-v="4" aria-pressed="false">4th</button></div></div>
+            <div class="cl-prev" id="cl-d-prev" aria-live="polite"><b>Reads as</b><span class="cl-pv" id="cl-d-pv"><span class="cl-pm">Type above and it appears here as math.</span></span></div>
+            <button class="btn cl-go" id="cl-d-run" type="submit">Differentiate</button>
+          </form>
+          <div class="cl-ex"><p class="cl-exl">Try an example</p><div class="cl-chips" id="cl-d-ex" role="group" aria-label="Examples"></div></div>
+          <details class="cl-tips"><summary>Input tips</summary><ul><li>Powers: <code>x^2</code>. Products: <code>3x</code> or <code>3*x</code>.</li><li>Functions: <code>sin cos tan sec ln log exp sqrt abs</code>; constants <code>pi</code> and <code>e</code>.</li></ul></details>
+        </div>
+        <div class="cl-out" id="cl-d-out">
+          <div class="cl-empty" id="cl-d-empty"><span class="cl-emic" aria-hidden="true">d/dx</span><b>Find a derivative</b><p>Enter a function of x and choose the order, or pick an example to see the working.</p></div>
+          <div class="cl-loading" id="cl-d-loading" role="status" hidden><div class="cl-loadrow"><span class="cl-spin" aria-hidden="true"></span><span id="cl-d-loadmsg">Calculating…</span></div><div class="cl-skel w1"></div><div class="cl-skel w2"></div><div class="cl-skel w3"></div></div>
+          <div class="cl-error" id="cl-d-error" role="alert" hidden><span class="cl-erric" aria-hidden="true">!</span><div><b>That didn’t work</b><p id="cl-d-errmsg"></p><small>Check brackets and operators, then try again, or pick one of the examples.</small></div></div>
+          <div class="cl-result" id="cl-d-result" hidden>
+            <div class="cl-answer"><p class="cl-alabel" id="cl-d-alabel">Answer</p><div class="cl-amath" id="cl-d-answer"></div><p class="cl-ahint" id="cl-d-ahint" hidden></p></div>
+            <div class="cl-card"><h3 class="cl-sec">Step-by-step solution <span id="cl-d-rule"></span></h3><div id="cl-d-steps"></div></div>
+            <div class="cl-card cl-graphcard" id="cl-d-gwrap" hidden><h3 class="cl-sec">Graph</h3><div class="cl-graph" id="cl-d-graph"></div><div class="legend" id="cl-d-legend"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="cl-panel" id="cl-int" hidden aria-labelledby="cl-i-title">
+      <div class="cl-phead">
+        <div><h2 class="cl-h" id="cl-i-title">Indefinite Integral</h2><p class="cl-lede">Find an antiderivative F(x) of f(x), with the rule named at each step. The constant C is added for you.</p></div>
+        <a class="gpill" href="/guides/calculus-integration.html"><i>i</i>Method guide</a>
+      </div>
+      <div class="cl-grid">
+        <div class="glass cl-inputcard">
+          <form class="cl-form" id="cl-i-form" novalidate>
+            <div class="cl-field"><label class="cl-flabel" for="cl-i-f">Function to integrate</label><div class="cl-inwrap"><span class="cl-pre" data-tex="\int">∫</span><input class="cl-in" id="cl-i-f" type="text" value="x*e^x" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Function of x to integrate"><span class="cl-pre" data-tex="dx" style="padding:0 13px 0 0">dx</span></div></div>
+            <div class="cl-prev" id="cl-i-prev" aria-live="polite"><b>Reads as</b><span class="cl-pv" id="cl-i-pv"><span class="cl-pm">Type above and it appears here as math.</span></span></div>
+            <button class="btn cl-go" id="cl-i-run" type="submit">Integrate</button>
+          </form>
+          <div class="cl-ex"><p class="cl-exl">Try an example</p><div class="cl-chips" id="cl-i-ex" role="group" aria-label="Examples"></div></div>
+          <details class="cl-tips"><summary>Input tips</summary><ul><li>Powers: <code>x^2</code>. Products: <code>3x</code> or <code>3*x</code>.</li><li>Functions: <code>sin cos tan sec ln log exp sqrt abs</code>; constants <code>pi</code> and <code>e</code>.</li><li>The variable is always <code>x</code>.</li></ul></details>
+        </div>
+        <div class="cl-out" id="cl-i-out">
+          <div class="cl-empty" id="cl-i-empty"><span class="cl-emic" aria-hidden="true">∫</span><b>Find an antiderivative</b><p>Enter a function of x, or pick an example. The answer comes first, followed by the full working.</p></div>
+          <div class="cl-loading" id="cl-i-loading" role="status" hidden><div class="cl-loadrow"><span class="cl-spin" aria-hidden="true"></span><span id="cl-i-loadmsg">Calculating…</span></div><div class="cl-skel w1"></div><div class="cl-skel w2"></div><div class="cl-skel w3"></div></div>
+          <div class="cl-error" id="cl-i-error" role="alert" hidden><span class="cl-erric" aria-hidden="true">!</span><div><b>That didn’t work</b><p id="cl-i-errmsg"></p><small>Check brackets and operators, then try again, or pick one of the examples.</small></div></div>
+          <div class="cl-result" id="cl-i-result" hidden>
+            <div class="cl-answer"><p class="cl-alabel" id="cl-i-alabel">Answer</p><div class="cl-amath" id="cl-i-answer"></div><p class="cl-ahint" id="cl-i-ahint" hidden></p></div>
+            <div class="cl-card"><h3 class="cl-sec">Step-by-step solution <span id="cl-i-rule"></span></h3><div id="cl-i-steps"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="cl-panel" id="cl-defint" hidden aria-labelledby="cl-di-title">
+      <div class="cl-phead">
+        <div><h2 class="cl-h" id="cl-di-title">Definite Integral</h2><p class="cl-lede">Evaluate the integral of f(x) between two bounds: the antiderivative, both substitutions, and the exact and decimal answer.</p></div>
+        <a class="gpill" href="/guides/calculus-integration.html"><i>i</i>Method guide</a>
+      </div>
+      <div class="cl-grid">
+        <div class="glass cl-inputcard">
+          <form class="cl-form" id="cl-di-form" novalidate>
+            <div class="cl-field"><label class="cl-flabel" for="cl-di-f">Function to integrate</label><div class="cl-inwrap"><span class="cl-pre" data-tex="f(x)=">f(x)=</span><input class="cl-in" id="cl-di-f" type="text" value="x^2" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Function of x to integrate"></div></div>
+            <div class="cl-pair"><div class="cl-field"><label class="cl-flabel" for="cl-di-a">Lower bound</label><div class="cl-inwrap"><span class="cl-pre" data-tex="a=">a =</span><input class="cl-in" id="cl-di-a" type="text" value="0" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Lower bound a"></div></div>
+            <div class="cl-field"><label class="cl-flabel" for="cl-di-b">Upper bound</label><div class="cl-inwrap"><span class="cl-pre" data-tex="b=">b =</span><input class="cl-in" id="cl-di-b" type="text" value="3" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Upper bound b"></div></div></div>
+            <div class="cl-prev" id="cl-di-prev" aria-live="polite"><b>Reads as</b><span class="cl-pv" id="cl-di-pv"><span class="cl-pm">Type above and it appears here as math.</span></span></div>
+            <button class="btn cl-go" id="cl-di-run" type="submit">Evaluate</button>
+          </form>
+          <div class="cl-ex"><p class="cl-exl">Try an example</p><div class="cl-chips" id="cl-di-ex" role="group" aria-label="Examples"></div></div>
+          <details class="cl-tips"><summary>Input tips</summary><ul><li>Powers: <code>x^2</code>. Products: <code>3x</code> or <code>3*x</code>.</li><li>Functions: <code>sin cos tan sec ln log exp sqrt abs</code>; constants <code>pi</code> and <code>e</code>.</li><li>Bounds can be numbers, fractions or constants: <code>pi</code>, <code>1/2</code>, <code>sqrt(2)</code>.</li><li>Bounds must be finite. The variable is always <code>x</code>.</li></ul></details>
+        </div>
+        <div class="cl-out" id="cl-di-out">
+          <div class="cl-empty" id="cl-di-empty"><span class="cl-emic" aria-hidden="true">∫ₐᵇ</span><b>Evaluate an integral</b><p>Enter a function and two bounds, or pick an example. You will see the antiderivative and both substitutions.</p></div>
+          <div class="cl-loading" id="cl-di-loading" role="status" hidden><div class="cl-loadrow"><span class="cl-spin" aria-hidden="true"></span><span id="cl-di-loadmsg">Calculating…</span></div><div class="cl-skel w1"></div><div class="cl-skel w2"></div><div class="cl-skel w3"></div></div>
+          <div class="cl-error" id="cl-di-error" role="alert" hidden><span class="cl-erric" aria-hidden="true">!</span><div><b>That didn’t work</b><p id="cl-di-errmsg"></p><small>Check brackets and operators, then try again, or pick one of the examples.</small></div></div>
+          <div class="cl-result" id="cl-di-result" hidden>
+            <div class="cl-answer"><p class="cl-alabel" id="cl-di-alabel">Answer</p><div class="cl-amath" id="cl-di-answer"></div><p class="cl-ahint" id="cl-di-ahint" hidden></p></div>
+            <div class="cl-card"><h3 class="cl-sec">Step-by-step solution <span id="cl-di-rule"></span></h3><div id="cl-di-steps"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="cl-panel" id="cl-guides" hidden aria-labelledby="cl-guides-title">
+      <div class="cl-phead"><div><h2 class="cl-h" id="cl-guides-title">Methods &amp; Guides</h2><p class="cl-lede">Concise, beginner-friendly notes on when and why each method is used. Open a guide to read it, or try the method on an example in the calculator.</p></div></div>
+      <div id="cl-guides-body"></div>
     </section>
   </div>
   </div>
